@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/navbar.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -16,15 +17,7 @@ class RegisterPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AppBar(
-              title: const Text('Inscription'),
-              backgroundColor: Colors.white,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Color(0xFF35796B)),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-            ),
+            const NavBar(selectedIndex: 4),
             const SizedBox(height: 30),
             const Text(
               "Créer un compte",
@@ -97,8 +90,11 @@ class RegisterPage extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
-                          // Retour à l'écran précédent avec un résultat de succès
-                          Navigator.pop(context, true);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Compte créé avec succès 🎉"),
+                            ),
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -118,7 +114,7 @@ class RegisterPage extends StatelessWidget {
                     const SizedBox(height: 20),
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context, false);
+                        Navigator.pushNamed(context, '/login');
                       },
                       child: const Text(
                         "Vous avez déjà un compte ? Connectez-vous",

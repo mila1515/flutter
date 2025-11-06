@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../widgets/navbar.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -9,12 +8,22 @@ class ScannerPage extends StatefulWidget {
   State<ScannerPage> createState() => _ScannerPageState();
 }
 
-class _ScannerPageState extends State<ScannerPage> {
+class _ScannerPageState extends State<ScannerPage> with AutomaticKeepAliveClientMixin {
   String? barcodeValue;
   bool isScanning = true;
+  MobileScannerController controller = MobileScannerController();
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   void _onDetect(BarcodeCapture capture) {
-    final Barcode? barcode = capture.barcodes.first;
+    final barcode = capture.barcodes.firstOrNull;
     if (barcode == null || !isScanning) return;
 
     setState(() {
@@ -43,11 +52,11 @@ class _ScannerPageState extends State<ScannerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFDFBF9),
-      body: Column(
+    super.build(context);
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const NavBar(selectedIndex: 2),
           const SizedBox(height: 20),
           const Text(
             "Scanner un produit",
@@ -58,35 +67,44 @@ class _ScannerPageState extends State<ScannerPage> {
             ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Placez le code-barres dans le cadre pour le lire automatiquement.",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black54),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              "Placez le code-barres dans le cadre pour le lire automatiquement.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black54),
+            ),
           ),
           const SizedBox(height: 20),
-          Expanded(
+          SizedBox(
+            height: 300,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: MobileScanner(
+                  controller: controller,
                   fit: BoxFit.cover,
                   onDetect: _onDetect,
                 ),
               ),
             ),
           ),
-          if (barcodeValue != null)
+          if (barcodeValue != null) ...[
+            const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 "Résultat : $barcodeValue",
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.brown,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
+          ],
+          const SizedBox(height: 20),
         ],
       ),
     );

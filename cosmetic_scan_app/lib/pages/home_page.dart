@@ -3,14 +3,29 @@ import 'scanner_page.dart';
 import 'about_page.dart';
 import 'login_page.dart';
 import 'register_page.dart';
+import 'profile_page.dart';
+import '../widgets/navbar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    _pageController.jumpToPage(index);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFDFBF9),
       appBar: AppBar(
@@ -20,138 +35,78 @@ class HomePage extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFF35796B)),
+        centerTitle: true,
       ),
-      drawer: _buildDrawer(context, 0),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Analysez vos cosmétiques en un scan",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF35796B),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Pointez votre caméra vers le code-barres de vos produits cosmétiques et obtenez instantanément une analyse détaillée de leur composition.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ScannerPage()),
-                      );
-                    },
-                    icon: const Icon(Icons.qr_code_scanner),
-                    label: const Text("Scanner maintenant"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFD3BBA3),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: [
+          // Page Accueil
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Analysez vos cosmétiques en un scan",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF35796B),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    runSpacing: 20,
-                    spacing: 16,
-                    children: const [
-                      FeatureCard(
-                        icon: Icons.flash_on,
-                        title: "Analyse instantanée",
-                        description:
-                            "Scannez le code-barres de vos produits et obtenez une analyse complète en quelques secondes.",
+                      const SizedBox(height: 40),
+                      const SizedBox(height: 40),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        runSpacing: 20,
+                        spacing: 16,
+                        children: const [
+                          FeatureCard(
+                            icon: Icons.flash_on,
+                            title: "Analyse instantanée",
+                            description: "Analyse complète en quelques secondes",
+                          ),
+                          FeatureCard(
+                            icon: Icons.person_outline,
+                            title: "Recommandations personnalisées",
+                            description: "Conseils personnalisés",
+                          ),
+                          FeatureCard(
+                            icon: Icons.edit_note,
+                            title: "Routines beauté adaptées",
+                            description: "Routines personnalisées",
+                          ),
+                        ],
                       ),
-                      FeatureCard(
-                        icon: Icons.person_outline,
-                        title: "Recommandations personnalisées",
-                        description:
-                            "Recevez des conseils adaptés à votre type de peau, âge et allergies spécifiques.",
-                      ),
-                      FeatureCard(
-                        icon: Icons.edit_note,
-                        title: "Routines beauté adaptées",
-                        description:
-                            "Créez des routines personnalisées avec des produits sûrs et efficaces pour votre peau.",
+                      const SizedBox(height: 40),
+                      Text(
+                        "© 2025 BeautyScan — Tous droits réservés",
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
-                  Text(
-                    "© 2025 BeautyScan — Tous droits réservés",
-                    style:
-                        TextStyle(color: Colors.grey.shade600, fontSize: 13),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context, int selectedIndex) {
-    final items = [
-      {'label': 'Accueil', 'route': '/', 'icon': Icons.home},
-      {'label': 'À propos', 'route': '/about', 'icon': Icons.info_outline},
-      {'label': 'Scanner', 'route': '/scanner', 'icon': Icons.qr_code_scanner},
-      {'label': 'Connexion', 'route': '/login', 'icon': Icons.login},
-      {'label': 'Inscription', 'route': '/register', 'icon': Icons.person_add},
-    ];
-
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color(0xFF35796B),
-            ),
-            child: Center(
-              child: Text(
-                'BeautyScan',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
+              ],
             ),
           ),
-          ...items.map((item) {
-            return ListTile(
-              leading: Icon(item['icon'] as IconData, color: const Color(0xFF35796B)),
-              title: Text(
-                item['label'] as String,
-                style: const TextStyle(fontSize: 16),
-              ),
-              selected: selectedIndex == items.indexOf(item),
-              selectedTileColor: const Color(0xFFE8F5E9),
-              onTap: () {
-                Navigator.pop(context); // Ferme le drawer
-                Navigator.pushNamed(context, item['route'] as String);
-              },
-            );
-          }).toList(),
+          // Page Scanner
+          const ScannerPage(),
+          // Page Profil
+          const ProfilePage(),
         ],
+      ),
+      bottomNavigationBar: NavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

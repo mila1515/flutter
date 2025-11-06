@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../widgets/navbar.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,15 +15,7 @@ class LoginPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AppBar(
-              title: const Text('Connexion'),
-              backgroundColor: Colors.white,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Color(0xFF35796B)),
-                onPressed: () => Navigator.pop(context, false),
-              ),
-            ),
+            const NavBar(selectedIndex: 3),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
               child: Center(
@@ -87,7 +81,11 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context, true);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const RegisterPage()),
+                          );
                         },
                         child: const Text(
                           "Pas encore de compte ? S’inscrire",
