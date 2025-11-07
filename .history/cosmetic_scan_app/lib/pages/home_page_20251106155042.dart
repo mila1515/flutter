@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'scanner_page.dart';
 import 'about_page.dart';
 import 'login_page.dart';
@@ -7,10 +6,7 @@ import 'register_page.dart';
 import 'profile_page.dart';
 import '../widgets/navbar.dart';
 
-/// Page d'accueil principale de l'application
-
 class HomePage extends StatefulWidget {
-  /// Crée une instance de la page d'accueil
   const HomePage({super.key});
 
   @override
@@ -18,13 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  /// Contrôleur pour la navigation entre les pages
-  final PageController _pageController = PageController();
-  
-  /// Index de l'onglet actif
   int _selectedIndex = 0;
+  final PageController _pageController = PageController();
 
-  /// Gère le changement d'onglet
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -40,16 +32,19 @@ class _HomePageState extends State<HomePage> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFFFDF8F2),  // Beige très clair
-            Color(0xFFF5EDE4),  // Beige clair
-            Color(0xFFEDE4D8),  // Beige légèrement plus foncé
+            Color(0xFFF8F9FA),
+            Color(0xFFE9F5F3),
+            Color(0xFFD4EDE8),
           ],
         ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('BeautyScan', style: TextStyle(color: Color(0xFF4A3F35), fontWeight: FontWeight.bold)),
+          title: Image.asset(
+            'assets/images/beautyscan_logo.png',
+            height: 32,
+          ),
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
@@ -146,19 +141,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
-/// Carte représentant une fonctionnalité de l'application
 class FeatureCard extends StatelessWidget {
-  /// Icône représentative de la fonctionnalité
   final IconData icon;
-  
-  /// Titre de la fonctionnalité
   final String title;
-  
-  /// Description de la fonctionnalité
   final String description;
 
   const FeatureCard({
@@ -196,7 +185,6 @@ class FeatureCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF4A3F35),
             ),
           ),
           const SizedBox(height: 8),

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'scanner_page.dart';
 import 'about_page.dart';
 import 'login_page.dart';
-import 'register_page.dart';
 import 'profile_page.dart';
 import '../widgets/navbar.dart';
 
